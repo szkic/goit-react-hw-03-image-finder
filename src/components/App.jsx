@@ -2,54 +2,72 @@ import { Component } from 'react';
 import { fetchPhotosWithQuery } from './services/api';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
+import { Button } from './Button/Button';
 
 export class App extends Component {
   state = {
     photos: [],
+    searchValue: '',
+    page: 1,
     error: null,
   };
 
-  async componentDidMount() {
-    try {
-      const photos = await fetchPhotosWithQuery();
-      console.log(photos);
-      photos.map(photo => {
-        return this.setState(prevState => ({
-          photos: [
-            ...prevState.photos,
-            {
-              id: photo.id,
-              webformatURL: photo.webformatURL,
-              largeImageURL: photo.largeImageURL,
-            },
-          ],
-        }));
-      });
-    } catch (error) {
-      console.log(error);
-      this.setState({ error });
+  async componentDidUpdate(prevState, prevProps) {
+    if (
+      this.state.searchValue !== prevProps.searchValue ||
+      this.state.page !== prevProps.page
+    ) {
+      try {
+        const photos = await fetchPhotosWithQuery(
+          this.state.searchValue,
+          this.state.page
+        );
+        photos.map(photo => {
+          return this.setState(prevState => ({
+            photos: [
+              ...prevState.photos,
+              {
+                id: photo.id,
+                webformatURL: photo.webformatURL,
+                largeImageURL: photo.largeImageURL,
+              },
+            ],
+          }));
+        });
+      } catch (error) {
+        this.setState({ error });
+        console.log(this.state.error);
+      }
     }
   }
 
-  searchValue = e => {
-    console.log(e);
-  };
+  searchValue = e => this.setState({ photos: [], searchValue: e });
 
   showPhotos = () => {
     const { photos } = this.state;
-
     return photos;
+  };
 
-    // console.log('showPhotos', photos);
+  handleButtonVisibility = () => {
+    if (this.state.photos.length < 12) return 'none';
+  };
+
+  loadMore = e => {
+    if (e) this.setState({ photos: [], page: this.state.page + 1 });
   };
 
   render() {
-    console.log('state', this.state);
-
+    console.log(this.state);
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />
         <ImageGallery photos={this.showPhotos()} />
+        <div
+          className="ButtonContainer"
+          style={{ display: this.handleButtonVisibility() }}
+        >
+          <Button onClick={this.loadMore} />
+        </div>
       </>
     );
   }
