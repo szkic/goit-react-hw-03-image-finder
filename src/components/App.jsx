@@ -3,6 +3,7 @@ import { fetchPhotosWithQuery } from './services/api';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -10,6 +11,7 @@ export class App extends Component {
     searchValue: '',
     page: 1,
     error: null,
+    isLoading: false,
   };
 
   async componentDidUpdate(prevState, prevProps) {
@@ -18,10 +20,13 @@ export class App extends Component {
       this.state.page !== prevProps.page
     ) {
       try {
+        this.setState({ isLoading: true });
+
         const photos = await fetchPhotosWithQuery(
           this.state.searchValue,
           this.state.page
         );
+
         photos.map(photo => {
           return this.setState(prevState => ({
             photos: [
@@ -37,6 +42,8 @@ export class App extends Component {
       } catch (error) {
         this.setState({ error });
         console.log(this.state.error);
+      } finally {
+        this.setState({ isLoading: false });
       }
     }
   }
@@ -53,20 +60,31 @@ export class App extends Component {
   };
 
   loadMore = e => {
-    if (e) this.setState({ photos: [], page: this.state.page + 1 });
+    if (e) {
+      this.setState({ page: this.state.page + 1 });
+
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth',
+        });
+      }, 500);
+    }
   };
 
   render() {
-    console.log(this.state);
+    console.log(this.state.isLoading);
+
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />
         <ImageGallery photos={this.showPhotos()} />
+        {this.state.isLoading && <Loader />}
         <div
           className="ButtonContainer"
           style={{ display: this.handleButtonVisibility() }}
         >
-          <Button onClick={this.loadMore} />
+          {!this.state.isLoading && <Button onClick={this.loadMore} />}
         </div>
       </>
     );

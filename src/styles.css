@@ -218,3 +218,8 @@ img {
 .show {
   display: inline-block;
 }
+
+.LoaderPosition {
+  display: flex;
+  justify-content: center;
+}
