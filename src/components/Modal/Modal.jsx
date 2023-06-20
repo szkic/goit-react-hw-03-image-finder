@@ -1,9 +1,12 @@
-export const Modal = props => {
-  console.log(props);
+export const Modal = ({ imageAddress, modalClose }) => {
+  window.addEventListener('keydown', e => {
+    e.key === 'Escape' && modalClose();
+  });
+
   return (
-    <div className="Overlay">
+    <div className="Overlay" onClick={modalClose}>
       <div className="Modal">
-        <img src="" alt="" />
+        <img src={imageAddress} alt="" />
       </div>
     </div>
   );

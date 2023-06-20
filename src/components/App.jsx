@@ -4,6 +4,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
+import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
@@ -12,6 +13,7 @@ export class App extends Component {
     page: 1,
     error: null,
     isLoading: false,
+    modal: '',
   };
 
   async componentDidUpdate(prevState, prevProps) {
@@ -72,13 +74,20 @@ export class App extends Component {
     }
   };
 
+  handleModal = imageAddress => this.setState({ modal: imageAddress });
+
+  modalClose = () => this.setState({ modal: '' });
+
   render() {
-    console.log(this.state.isLoading);
+    console.log(this.state.modal);
 
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />
-        <ImageGallery photos={this.showPhotos()} />
+        <ImageGallery
+          photos={this.showPhotos()}
+          imageAddress={this.handleModal}
+        />
         {this.state.isLoading && <Loader />}
         <div
           className="ButtonContainer"
@@ -86,6 +95,9 @@ export class App extends Component {
         >
           {!this.state.isLoading && <Button onClick={this.loadMore} />}
         </div>
+        {this.state.modal !== '' && (
+          <Modal imageAddress={this.state.modal} modalClose={this.modalClose} />
+        )}
       </>
     );
   }

@@ -1,12 +1,13 @@
 export const ImageGalleryItem = props => {
-  const { id, webformatURL } = props;
-
-  const handleClick = e => {
-    console.log(e.currentTarget.value);
-  };
+  const { id, webformatURL, largeImageURL, imageAddress } = props;
 
   return (
-    <li className="ImageGalleryItem" key={id} value={id} onClick={handleClick}>
+    <li
+      className="ImageGalleryItem"
+      key={id}
+      value={id}
+      onClick={() => imageAddress(largeImageURL)}
+    >
       <img src={webformatURL} alt="" className="ImageGalleryItem-image" />
     </li>
   );
