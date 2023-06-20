@@ -37,6 +37,7 @@ export class App extends Component {
                 id: photo.id,
                 webformatURL: photo.webformatURL,
                 largeImageURL: photo.largeImageURL,
+                tags: photo.tags,
               },
             ],
           }));
@@ -79,8 +80,6 @@ export class App extends Component {
   modalClose = () => this.setState({ modal: '' });
 
   render() {
-    console.log(this.state.modal);
-
     return (
       <>
         <Searchbar onSubmit={this.searchValue} />

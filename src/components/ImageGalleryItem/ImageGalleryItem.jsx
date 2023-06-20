@@ -1,5 +1,5 @@
 export const ImageGalleryItem = props => {
-  const { id, webformatURL, largeImageURL, imageAddress } = props;
+  const { id, webformatURL, largeImageURL, tags, imageAddress } = props;
 
   return (
     <li
@@ -8,7 +8,7 @@ export const ImageGalleryItem = props => {
       value={id}
       onClick={() => imageAddress(largeImageURL)}
     >
-      <img src={webformatURL} alt="" className="ImageGalleryItem-image" />
+      <img src={webformatURL} alt={tags} className="ImageGalleryItem-image" />
     </li>
   );
 };
