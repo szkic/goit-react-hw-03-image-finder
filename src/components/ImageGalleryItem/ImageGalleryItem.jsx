@@ -1,4 +1,5 @@
 import css from './ImageGalleryItem.module.css';
+import PropTypes from 'prop-types';
 
 export const ImageGalleryItem = props => {
   const { id, webformatURL, largeImageURL, tags, imageAddress } = props;
@@ -17,4 +18,12 @@ export const ImageGalleryItem = props => {
       />
     </li>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  id: PropTypes.number,
+  webformatURL: PropTypes.string,
+  largeImageURL: PropTypes.string,
+  tags: PropTypes.string,
+  imageAddress: PropTypes.func,
 };

@@ -1,4 +1,5 @@
 import css from './Modal.module.css';
+import PropTypes from 'prop-types';
 
 export const Modal = ({ imageAddress, modalClose }) => {
   window.addEventListener('keydown', e => {
@@ -12,4 +13,9 @@ export const Modal = ({ imageAddress, modalClose }) => {
       </div>
     </div>
   );
+};
+
+Modal.propTypes = {
+  imageAddress: PropTypes.string,
+  modalClose: PropTypes.func,
 };
