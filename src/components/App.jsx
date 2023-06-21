@@ -77,7 +77,9 @@ export class App extends Component {
 
   handleModal = imageAddress => this.setState({ modal: imageAddress });
 
-  modalClose = () => this.setState({ modal: '' });
+  modalClose = e => this.setState({ modal: e });
+
+  passImgToModal = () => this.state.modal;
 
   render() {
     return (
@@ -95,7 +97,10 @@ export class App extends Component {
           {!this.state.isLoading && <Button onClick={this.loadMore} />}
         </div>
         {this.state.modal !== '' && (
-          <Modal imageAddress={this.state.modal} modalClose={this.modalClose} />
+          <Modal
+            imageAddress={this.passImgToModal()}
+            onClick={this.modalClose}
+          />
         )}
       </>
     );
